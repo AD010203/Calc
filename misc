@@ -1,0 +1,626 @@
+***** calculator *****
+
+namespace dynamicCalculator
+{
+    public partial class Form1 : Form
+    {
+        float fno, sno;
+        String sign = "";
+        Button zero, dot, eq;
+        Button[] bt = new Button[5];
+        String[] btvalue = new String[] { "C", "+", "-", "*", "/" };
+        TextBox t1;
+        Button[,] btn = new Button[3, 3];
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            t1 = new TextBox();
+            t1.Width = 500;
+            this.Controls.Add(t1);
+
+            int top = 50, left = 5, val = 1;
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    btn[i, j] = new Button();
+                    btn[i, j].Top = top;
+                    btn[i, j].Left = left;
+                    btn[i, j].Height = 50;
+                    btn[i, j].Width = 50;
+                    btn[i, j].Text = val.ToString();
+                    btn[i, j].Click += new EventHandler(Form1_Click);
+                    left += 50;
+                    val++;
+                    this.Controls.Add(btn[i, j]);
+                }
+                left = 5;
+                top += 50;
+            }
+
+            zero = new Button();
+            zero.Left = 5;
+            zero.Height = 50;
+            zero.Width = 100;
+            zero.Top = 200;
+            zero.Text = "0";
+            zero.Click += new EventHandler(Form1_Click);
+            this.Controls.Add(zero);
+
+            dot = new Button();
+            dot.Left = 105;
+            dot.Height = 50;
+            dot.Width = 50;
+            dot.Top = 200;
+            dot.Text = ".";
+            dot.Click += new EventHandler(Form1_Click);
+            this.Controls.Add(dot);
+
+            eq = new Button();
+            eq.Left = 5;
+            eq.Height = 50;
+            eq.Width = 150;
+            eq.Top = 250;
+            eq.Text = "=";
+            eq.Click += new EventHandler(Form1_Click2);
+            this.Controls.Add(eq);
+
+            top = 50;
+            left = 155;
+            for (int i = 0; i < 5; i++)
+            {
+                bt[i] = new Button();
+                bt[i].Left = left;
+                bt[i].Top = top;
+                bt[i].Text = btvalue[i];
+                bt[i].Height = 50;
+                bt[i].Width = 50;
+                bt[i].Click += new EventHandler(Form1_Click1);
+                this.Controls.Add(bt[i]);
+                top += 50;
+            }
+        }
+
+        private void Form1_Click2(object sender, EventArgs e)
+        {
+            sno = float.Parse(t1.Text);
+
+            if (sign == "+")
+            {
+                t1.Text = (fno + sno).ToString();
+            }
+            else if (sign == "-")
+            {
+                t1.Text = (fno - sno).ToString();
+            }
+            else if (sign == "*")
+            {
+                t1.Text = (fno * sno).ToString();
+            }
+            else if (sign == "/")
+            {
+                t1.Text = (fno / sno).ToString();
+            }
+        }
+
+        private void Form1_Click1(object sender, EventArgs e)
+        {
+            Button b = (Button)sender;
+
+            if (b.Text == "C")
+            {
+                fno = 0;
+                sno = 0;
+                sign = "";
+                t1.Clear();
+            }
+            else
+            {
+                sign = b.Text;
+                fno = float.Parse(t1.Text);
+                t1.Clear();
+            }
+        }
+
+        private void Form1_Click(object sender, EventArgs e)
+        {
+            Button b = (Button)sender;
+
+            t1.Text += b.Text;
+
+        }
+        
+  ***** tic tac toe *****
+  
+  namespace dynamicTicTacToe
+{
+    public partial class Form1 : Form
+    {
+        int num, flag = 0;
+        Button[,] bt;
+        TextBox t1 = new TextBox();
+        Button btn = new Button();
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            t1.Left = 10;
+            t1.Top = 30;
+            this.Controls.Add(t1);
+
+            btn.Text = "Start";
+            btn.Top = 30;
+            btn.Left = 150;
+            btn.Click += new EventHandler(Form1_Click);
+            this.Controls.Add(btn);
+        }
+
+        private void Form1_Click(object sender, EventArgs e)
+        {
+            num = int.Parse(t1.Text);
+
+            if(num > 5)
+            {
+                MessageBox.Show("Number Must Be Less Or Equal To 5");
+                return;
+            }
+
+            bt = new Button[num, num];
+
+            int top = 100, left = 30;
+
+            for (int i = 0; i < num; i++)
+            {
+                for (int j = 0; j < num; j++)
+                {
+                    bt[i, j] = new Button();
+                    bt[i, j].Top = top;
+                    bt[i, j].Left = left;
+                    bt[i, j].Width = 50;
+                    bt[i, j].Height = 50;
+                    bt[i, j].Click += new EventHandler(Form1_Click1);
+                    left += 70;
+                    this.Controls.Add(bt[i, j]);
+                }
+                top += 70;
+                left = 30;
+            }
+        }
+
+        private void Form1_Click1(object sender, EventArgs e)
+        {
+            Button b = (Button)sender;
+            if (flag == 0)
+            {
+                b.Text = "0";
+                flag = 1;
+                b.Enabled = false;
+                row_check();
+                col_check();
+                d1();
+                d2();
+            }
+            else
+            {
+                b.Text = "X";
+                flag = 0;
+                b.Enabled = false;
+                row_check();
+                col_check();
+                d1();
+                d2();
+            }
+
+        }
+
+        public void row_check()
+        {
+            bool flag = true;
+            for (int i = 0; i < num; i++)
+            {
+                for (int j = 1; j < num; j++)
+                {
+                    if (bt[i, 0].Text == bt[i, j].Text && bt[i, 0].Text != "")
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        flag = false;
+                    }
+                }
+                if (flag == true)
+                {
+                    MessageBox.Show("Win");
+                    reset();
+                }
+
+            }
+
+        }
+
+        public void col_check()
+        {
+            bool flag = true;
+            for (int i = 0; i < num; i++)
+            {
+                for (int j = 1; j < num; j++)
+                {
+                    if (bt[0, i].Text == bt[j, i].Text && bt[0, i].Text != "")
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        flag = false;
+                    }
+                }
+                if (flag == true)
+                {
+                    MessageBox.Show("Win");
+                    reset();
+                }
+
+            }
+
+        }
+
+        public void d1()
+        {
+            bool flag = true;
+            for (int i = 1; i < num; i++)
+            {
+                if (bt[0, 0].Text == bt[i, i].Text && bt[0, 0].Text != "")
+                {
+                    continue;
+                }
+                else
+                {
+                    flag = false;
+                }
+            }
+            if (flag == true)
+            {
+                MessageBox.Show("Win");
+                reset();
+            }
+        }
+
+        public void d2()
+        {
+            bool flag = true;
+            for (int i = 1; i < num; i++)
+            {
+                int k = num - i - 1;
+                if (bt[0, num - 1].Text == bt[i, k].Text && bt[0, num - 1].Text != "")
+                {
+                    continue;
+                }
+                else
+                {
+                    flag = false;
+                }
+            }
+            if (flag == true)
+            {
+                MessageBox.Show("Win");
+                reset();
+            }
+        }
+
+        public void reset()
+        {
+            for (int i = 0; i < num; i++)
+            {
+                for (int j = 0; j < num; j++)
+                {
+                    bt[i, j].Text = "";
+                    bt[i, j].Enabled = true;
+                    flag = 0;
+                }
+            }
+        }
+    }
+
+
+**** notpad ****
+
+namespace notepad
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Clear();
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ayushi = new OpenFileDialog();
+            ayushi.Title = "Open";
+            ayushi.Filter = "Text Document(*.txt)|*.txt|All Files(*.*)|*.*";
+            if (ayushi.ShowDialog() == DialogResult.OK)
+                richTextBox1.LoadFile(ayushi.FileName, RichTextBoxStreamType.PlainText);
+            this.Text = ayushi.FileName;
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog ayushi = new SaveFileDialog();
+            ayushi.Title = "Save";
+            ayushi.Filter = "Text Document(*.txt)|*.txt|All Files(*.*)|*.*";
+            if (ayushi.ShowDialog() == DialogResult.OK)
+                richTextBox1.SaveFile(ayushi.FileName, RichTextBoxStreamType.PlainText);
+            this.Text = ayushi.FileName;
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog ayushi = new SaveFileDialog();
+            ayushi.Title = "Save";
+            ayushi.Filter = "Text Document(*.txt)|*.txt|All Files(*.*)|*.*";
+            if (ayushi.ShowDialog() == DialogResult.OK)
+                richTextBox1.SaveFile(ayushi.FileName, RichTextBoxStreamType.PlainText);
+            this.Text = ayushi.FileName;
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void dateTimeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Text = System.DateTime.Now.ToString();
+        }
+
+        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Undo();
+        }
+
+        private void reduToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Redo();
+        }
+
+        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Cut();
+        }
+
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Copy();
+        }
+
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Paste();
+        }
+
+        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox1.SelectAll();
+        }
+
+        private void fontToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FontDialog fnt = new FontDialog();
+            if (fnt.ShowDialog() == DialogResult.OK)
+                richTextBox1.Font = fnt.Font;
+
+        }
+
+        private void colorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ColorDialog fnt = new ColorDialog();
+            if (fnt.ShowDialog() == DialogResult.OK)
+                richTextBox1.ForeColor = fnt.Color;
+        }
+    }
+}
+
+***** Puzzle *****
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace SlidingPuzzle
+{
+    public partial class Form1 : Form
+    {
+        const int BOARD_SIZE = 4;
+        const int TILE_SIZE = 100;
+        const int EMPTY = 0;
+
+        int[,] board = new int[BOARD_SIZE, BOARD_SIZE];
+        Image[] images = new Image[BOARD_SIZE * BOARD_SIZE];
+        Point mouseDown, mouseUp; //don't need new operator as it's a structure (value type)
+        Random rand = new Random();
+
+        public Form1()
+        {
+            InitializeComponent();
+            //load the 16 tiles
+            for (int i = 0; i < BOARD_SIZE*BOARD_SIZE; i++)
+            {
+                //type cast as bit value was returned from right
+                images[i] = (Image) Properties.Resources.ResourceManager.GetObject("Tile" + i);
+            }
+            //fill up the board
+            for (int i = 0; i < BOARD_SIZE; i++)
+            {
+                for (int j = 0; j < BOARD_SIZE; j++)
+                {
+                    board[i,j] = j * BOARD_SIZE + i;
+                }
+            }
+            //shuffle it
+            ScrambleBoard();
+        }
+
+        /// <summary>
+        /// Scrambles the board by switiching random cells 1000 times
+        /// </summary>
+        void ScrambleBoard()
+        {
+            for (int i = 0; i < 1000; i++)
+            {
+                int x1 = rand.Next(BOARD_SIZE);
+                int x2 = rand.Next(BOARD_SIZE);
+                int y1 = rand.Next(BOARD_SIZE);
+                int y2 = rand.Next(BOARD_SIZE);
+                int temp = board[x1, y1]; //save coord1
+                board[x1, y1] = board[x2, y2]; //copy 2nd coord into 1st
+                board[x2, y2] = temp; //copy temp(1st) coord into 2nd
+            }
+        }
+
+        bool IsValidMove()
+        {
+            try
+            {
+                int dx = Math.Abs(mouseDown.X - mouseUp.X);
+                int dy = Math.Abs(mouseDown.Y - mouseUp.Y);
+
+                if (board[mouseUp.X, mouseUp.Y] == EMPTY)
+                {
+                    if ((dx == 0 && dy == 1) || (dx == 1 && dy == 0))
+                        return true;
+                }                
+            }
+            catch { }
+            return false;
+        }
+
+        private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
+        {
+            //0,1,2,3 ==> scale down to grid
+            mouseDown.X = e.X / TILE_SIZE;
+            mouseDown.Y = e.Y / TILE_SIZE;
+        }
+
+        private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
+        {
+            //0,1,2,3 ==> convert 350 to 3
+            mouseUp.X = e.X / TILE_SIZE;
+            mouseUp.Y = e.Y / TILE_SIZE;
+
+            if (IsValidMove())
+            {
+                int temp = board[mouseDown.X,mouseDown.Y]; //save coord1
+                board[mouseDown.X, mouseDown.Y] = board[mouseUp.X, mouseUp.Y]; //copy 2nd coord into 1st
+                board[mouseUp.X, mouseUp.Y] = temp; //copy temp(1st) coord into 2nd
+            }
+
+            pictureBox1.Invalidate();
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        //display tiles on the picture box
+        private void pictureBox1_Paint(object sender, PaintEventArgs e)
+        {
+            for (int i = 0; i < BOARD_SIZE; i++)
+            {
+                for (int j = 0; j < BOARD_SIZE; j++)
+                {
+                    int tile = board[i, j]; //get the tile number
+                    Image img = images[tile];
+
+                    //convert i,j from array coordinates to screen coordinates
+                    e.Graphics.DrawImage(img, i * TILE_SIZE, j * TILE_SIZE);
+                }
+            }
+        }
+    }
+}
+
+***** square Matrix *****
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace squareMatrics
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Enter Number Of Rows: ");
+            int m = int.Parse(Console.ReadLine());
+            Console.WriteLine("Enter Number Of Coloumns: ");
+            int n = int.Parse(Console.ReadLine());
+            int[,] matrix = new int[m, n];
+            int r = m, c = n;
+            int k = 0, l = 0, val = 1;
+
+            while (k < m && l < n)
+            {
+                for (int i = l; i < n; i++)
+                {
+                    matrix[k, i] = val++;
+                }
+                k++;
+                for (int i = k; i < m; i++)
+                {
+                    matrix[i, n - 1] = val++;
+                }
+                n--;
+                if (k < m)
+                {
+                    for (int i = n - 1; i >= l; --i)
+                    {
+                        matrix[m - 1, i] = val++;
+                    }
+                    m--;
+                }
+                if (l < n)
+                {
+                    for (int i = m - 1; i >= k; --i)
+                    {
+                        matrix[i, l] = val++;
+                    }
+                    l++;
+                }
+            }
+
+            for (int i = 0; i < r; i++)
+            {
+                for (int j = 0; j < c; j++)
+                {
+                    Console.Write(matrix[i, j] + " ");
+                }
+                Console.Write("\n");
+            }
+            Console.Read();
+        }
+    }
+}
+
